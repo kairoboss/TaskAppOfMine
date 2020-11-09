@@ -24,6 +24,10 @@ import com.example.taskappofmine.ui.utils.Prefs;
 
 public class ProfileFragment extends Fragment {
     private TextView textView;
+    private TextView textPosts;
+    private TextView textFollowers;
+    private TextView textFollowing;
+    private TextView textPhotos;
     Prefs prefs;
     SharedPreferences sPrefs;
 
@@ -47,6 +51,14 @@ public class ProfileFragment extends Fragment {
             prefs = new Prefs(requireContext());
             String savedText = prefs.getString("key");
             textView.setText(savedText);
+            textPosts = view.findViewById(R.id.posts);
+            textPosts.setText("63 /n posts");
+            textFollowers = view.findViewById(R.id.followers);
+        textFollowers.setText("63 /n followers");
+            textFollowing = view.findViewById(R.id.following);
+        textFollowing.setText("63 /n following");
+            textPhotos = view.findViewById(R.id.photos);
+        textPhotos.setText("63 /n photos");
     }
 
     @Override
