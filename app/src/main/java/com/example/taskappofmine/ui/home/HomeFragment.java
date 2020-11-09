@@ -6,10 +6,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +31,7 @@ import com.example.taskappofmine.MainActivity;
 import com.example.taskappofmine.R;
 import com.example.taskappofmine.interfaces.OnItemClickListener;
 import com.example.taskappofmine.models.Task;
+import com.example.taskappofmine.ui.utils.Prefs;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDateTime;
@@ -39,6 +44,9 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private TaskAdapter taskAdapter;
     private Task task;
+    private boolean b = false;
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,13 +58,7 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         taskAdapter = new TaskAdapter();
         loadData();
-        //Random r = new Random();
-        //for (int i = 0; i < 10; i++) {
-        //String[] randomWords = generateRandomWords(10);
-        //String randomWord = randomWords[r.nextInt(randomWords.length)];
-        //Task task = new Task("randomWord", System.currentTimeMillis());
-        //taskAdapter.addItem(task);
-        // }
+        setHasOptionsMenu(true);
 
         taskAdapter.setOnItemClickListener(new OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -64,7 +66,6 @@ public class HomeFragment extends Fragment {
             public void onItemClick(int pos) {
 
                 Toast.makeText(requireContext(), taskAdapter.getItem(pos).getTitle() + " ", Toast.LENGTH_SHORT).show();
-                Toast.makeText(requireContext(), task.getTitle() + " ", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -72,13 +73,7 @@ public class HomeFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Удаление");
                 builder.setMessage("Удалить элемент списка?");
-                builder.setNegativeButton("Отмена",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-
-                            }
-                        });
+                builder.setNegativeButton("Отмена",null);
                 builder.setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
@@ -107,12 +102,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadData() {
-        List<Task> list = App.getDataBase().taskDao().getAll();
-        taskAdapter.addList(list);
+        List<Task> tasks = App.getDataBase().taskDao().getAll();
+        taskAdapter.addList(tasks);
     }
 
     private void initList(View view) {
-        RecyclerView recyclerView  =view.findViewById(R.id.recyclerView_home);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_home);
 
         recyclerView.setAdapter(taskAdapter);
     }
@@ -127,11 +122,11 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void openForm(){
-        NavController navController = Navigation.findNavController(requireActivity(),R.id.nav_host_fragment);
+    private void openForm() {
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         navController.navigate(R.id.action_navigation_home_to_formFragment);
     }
-    /*public static String[] generateRandomWords(int numberOfWords)
+    public static String[] generateRandomWords(int numberOfWords)
     {
         String[] randomStrings = new String[numberOfWords];
         Random random = new Random();
@@ -145,5 +140,37 @@ public class HomeFragment extends Fragment {
             randomStrings[i] = new String(word);
         }
         return randomStrings;
-    }*/
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.sort_time) {
+            if (b == true) {
+                List<Task> taskList = App.getDataBase().taskDao().reverseOrderByDate();
+                taskAdapter.addList(taskList);
+            } else {
+                List<Task> taskList = App.getDataBase().taskDao().orderByDate();
+                taskAdapter.addList(taskList);
+                b = true;
+            }
+        }
+        if (item.getItemId() == R.id.sort_alphabet) {
+            if (b == true) {
+                List<Task> taskList = App.getDataBase().taskDao().reverseOrderByAlphabet();
+                taskAdapter.addList(taskList);
+            } else {
+                List<Task> taskList = App.getDataBase().taskDao().orderByAlphabet();
+                taskAdapter.addList(taskList);
+                b = true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.home_menu, menu);
+    }
 }

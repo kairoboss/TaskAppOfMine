@@ -1,4 +1,4 @@
-package com.example.taskappofmine.ui.home;
+package com.example.taskappofmine.ui.dashboard;
 
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -17,12 +17,10 @@ import com.example.taskappofmine.models.Task;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
+public class DashTaskAdapter extends RecyclerView.Adapter<DashTaskAdapter.ViewHolder> {
 
     private List<Task> list = new ArrayList<>();
     TextView textTitle;
@@ -38,14 +36,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public TaskAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_task, parent, false);
+    public DashTaskAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.dash_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onBindViewHolder(@NonNull TaskAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DashTaskAdapter.ViewHolder holder, int position) {
         holder.bind(list.get(position));
     }
 
@@ -63,9 +61,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         return list.get(pos);
     }
 
-    public int getItemPosition(int pos) {
-        return pos;
-    }
 
     public void removeItem(int pos) {
         list.remove(pos);
@@ -82,8 +77,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textTitle = itemView.findViewById(R.id.list_text);
-            textDate = itemView.findViewById(R.id.list_date);
+            textTitle = itemView.findViewById(R.id.list_dash_text);
+            textDate = itemView.findViewById(R.id.list_dash_date);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

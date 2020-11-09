@@ -51,4 +51,9 @@
         android:name="com.example.taskappofmine.ui.profile.ProfileEditFragment"
         android:label="fragment_profile_edit"
         tools:layout="@layout/fragment_profile_edit" />
+    <fragment
+        android:id="@+id/phoneFragment"
+        android:name="com.example.taskappofmine.auth.PhoneFragment"
+        android:label="fragment_phone"
+        tools:layout="@layout/fragment_phone" />
 </navigation>

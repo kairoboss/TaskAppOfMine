@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/clear_pref"
-        android:title="Clear pref data"
-        app:showAsAction="never"/>
-
+        android:id="@+id/actionEdit"
+        android:title="Edit"
+        android:icon="@drawable/ic_baseline_edit_24"
+        app:showAsAction="ifRoom" />
 </menu>

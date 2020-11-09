@@ -21,11 +21,14 @@ public class Prefs {
         preferences.edit().clear().apply();
     }
 
-    public void putString(String name){
-        preferences.edit().putString("name", name).apply();
-    }
-    public String getString(){
-        String name = preferences.getString("name", null);
+    public void putString(String key,String name){
+        preferences.edit().putString("name", name).apply();}
+    public String getString(String key){
+        if (preferences.contains("name")){
+             name = preferences.getString("name", "");}
+        else {
+            name = "KAIRAT";
+        }
         return name;
     }
 }

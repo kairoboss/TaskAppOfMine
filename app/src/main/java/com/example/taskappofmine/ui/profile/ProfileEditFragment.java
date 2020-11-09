@@ -47,7 +47,7 @@ public class ProfileEditFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         btnSave = view.findViewById(R.id.btn_save_edit);
         editText = view.findViewById(R.id.profile_editText);
-        String text = prefs.getString();
+        String text = prefs.getString("key");
         editText.setText(text);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +58,7 @@ public class ProfileEditFragment extends Fragment {
     }
 
     private void save() {
-        prefs.putString(editText.getText().toString());
+        prefs.putString("key",editText.getText().toString());
         close();
     }
 

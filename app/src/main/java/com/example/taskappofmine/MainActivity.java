@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.taskappofmine.ui.utils.Prefs;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
-    private TextView btnEdit;
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,38 +35,24 @@ public class MainActivity extends AppCompatActivity {
         initNavController();
         Prefs prefs = new Prefs(this);
         if (!prefs.isShown()){
-            navController.navigate(R.id.navigation_home);
-        }
-        else {
             navController.navigate(R.id.boardFragment);
+        } else if (FirebaseAuth.getInstance().getCurrentUser() == null){
+            navController.navigate(R.id.phoneFragment);
         }
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
         return true;
     }
 
     private void initial() {
         toolbar = findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        btnEdit = findViewById(R.id.btn_edit);
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditFragment();
-            }
-        });
-
     }
 
-    private void openEditFragment() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        navController.navigate(R.id.action_navigation_profile_to_profileEditFragment);
-        navController.navigate(R.id.boardFragment);
-    }
 
     private void initNavController() {
         final BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -91,11 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 else{
                     navView.setVisibility(View.GONE);
                 }
-                if (destination.getId() == R.id.navigation_profile){
-                    btnEdit.setVisibility(View.VISIBLE);
-                }else {
-                    btnEdit.setVisibility(View.GONE);
-                }
+
             }
         });
     }
